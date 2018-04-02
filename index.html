@@ -1,0 +1,145 @@
+<!doctype html>
+
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <title>Titulo</title>
+    <meta name="description" content="Una descripcion">
+    <meta name="author" content="Abraham Garcia">
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+<script src=js/jquery.countdown.min.js></script>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var datetime = "";
+        var currentdate = new Date();
+        var init=currentdate;
+        //AQUI AGREGO 100 MINUTOS
+        currentdate.setMinutes(currentdate.getMinutes()+40);
+        currentdate.setHours(currentdate.getHours()+1);
+        //OBTENGO LA HORA PARA PONERLA AL CONTADOR
+        var init = currentdate;
+        if (currentdate.getHours() == 23) {
+            datetime += +currentdate.getFullYear() + "/" +
+                (currentdate.getMonth()) + "/" +
+                currentdate.getDate() + " 00" + +":" +
+                currentdate.getMinutes() + ":" +
+                currentdate.getSeconds();
+
+        } else {
+            datetime += +currentdate.getFullYear() + "/" +
+                (currentdate.getMonth() + 1) + "/" +
+                currentdate.getDate() + " " + (
+                    currentdate.getHours()) + ":" +
+                currentdate.getMinutes() + ":" +
+                (currentdate.getSeconds());
+        }
+        //AQUI ESTA LA HORA
+        alert(datetime);
+
+
+        //NUEVA CUENTA REGRESIVA DE 100 MINUTOS... APPROX 1HR 40 MN
+        $('#clock').countdown(datetime, function(event) {
+            $(this).html(event.strftime('%H:%M:%S'));
+        }).on('finish.countdown', function(event) {
+            //CUANDO TERMINA MANDO UNA ALERTA
+            alert("hi");
+        });
+
+
+
+
+        $("#bot").click(function(e) {
+            
+            //sumar los minutos y segundos que le faltan al estudiante
+            //POR EJEMPLO, AL ESTUDIANTE LE FALTA 1 HORA 20 MIN
+            var datetime2 = "";
+            var currentdate2 = new Date();
+            currentdate2.setHours(currentdate2.getHours()+1); //+1 hora
+            currentdate2.setMinutes(currentdate2.getMinutes()+20);//+20 min
+            if (currentdate2.getHours() == 23) {
+                datetime2 += +currentdate2.getFullYear() + "/" +
+                    (currentdate2.getMonth() + 1) + "/" +
+                    currentdate2.getDate() + " 00" + +":" +
+                    (currentdate2.getMinutes()) + ":" +
+                    currentdate2.getSeconds();
+
+            } else {
+                datetime2 += +currentdate2.getFullYear() + "/" +
+                    (currentdate2.getMonth() + 1) + "/" +
+                    currentdate2.getDate() + " " + (
+                        currentdate2.getHours()) + ":" +
+                    (currentdate2.getMinutes()) + ":" +
+                    (currentdate2.getSeconds());
+            }
+
+            alert(datetime2);
+            //Reseteo el reloj a el nuevo tiempo
+            $('#clock').countdown(datetime2);
+
+        });
+
+        
+        //PARA PARAR EL CONTADOR Y CAPTURAR EL TIEMPO QUE FALTA
+        $("#bot2").click(function(e) {
+            //CADA QUE SUCEDA UNA ACTUALIZACION EN LA CUENTA REGRESIVA
+            $('#clock').on('update.countdown', function(e) {
+                var $this = $(this);
+                //var end= e.strftime('%H:%M:%S');
+                var end = new Date();
+                var ends = Math.abs(init-end);
+                alert(init);
+                alert(end);
+                alert(ends);
+
+                var secondsToTime = function(s) {
+
+                    function addZ(n) {
+                        return (n < 10 ? '0' : '') + n;
+                    }
+
+                    var ms = s % 1000;
+                    s = (s - ms) / 1000;
+                    var secs = s % 60;
+                    s = (s - secs) / 60;
+                    var mins = s % 60;
+                    var hrs = (s - mins) / 60;
+
+                    return addZ(hrs) + ':' + addZ(mins) + ':' + addZ(secs);
+                }
+                //OBTENER DE AQUI LOS MINUTOS Y SEGUNDOS QUE LE QUEDAN AL ESTUDIANTE
+                var resultado = secondsToTime(ends);
+                //DEBEN SER LOS MISMOS DEL CONTADOR
+
+                alert(resultado);
+
+                $('#clock').countdown('pause');
+            });
+
+
+        });
+
+
+    });
+
+</script>
+
+<body>
+    <a class="waves-effect waves-light btn" id="bot">Reanudar, con solo 1h 20m</a>
+    <a class="waves-effect waves-light btn" id="bot2">Pausar y obtener el tiempo</a>
+
+    <span id="clock"></span>
+
+</body>
+
+</html>
